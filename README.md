@@ -226,7 +226,7 @@ As usual, 30% deduction if late.
 
 ## 📁 Project Structure
 
-Laravel follows a standard MVC structure. Here's what you'll be working with:
+Laravel follows a standard MVC structure. This is what it should resemble (does not have to be exactly this, of course:
 
 ```
 your-laravel-project/

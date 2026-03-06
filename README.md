@@ -143,6 +143,7 @@ _NOTE: You have creative freedom in implementing these expanded requirements. En
    - **Mac**: Use Homebrew: `brew install php`
    - **Linux**: `sudo apt install php php-cli php-mbstring php-xml php-pgsql`
      (kay apparently may ga-Linux daw sa inyo)
+   - Also, make sure to configure the PATH (in Environment Variables in Windows) for PHP before proceeding with Composer (VITAL!).
 
 2. **Composer** (Dependency Manager for PHP)
    - [Download Composer](https://getcomposer.org/download/)

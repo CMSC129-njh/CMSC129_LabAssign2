@@ -144,6 +144,7 @@ _NOTE: You have creative freedom in implementing these expanded requirements. En
    - **Linux**: `sudo apt install php php-cli php-mbstring php-xml php-pgsql`
      (kay apparently may ga-Linux daw sa inyo)
    - Also, make sure to configure the PATH (in Environment Variables in Windows) for PHP before proceeding with Composer (VITAL!).
+   
 
 2. **Composer** (Dependency Manager for PHP)
    - [Download Composer](https://getcomposer.org/download/)
@@ -153,23 +154,23 @@ _NOTE: You have creative freedom in implementing these expanded requirements. En
    - [Download PostgreSQL](https://www.postgresql.org/download/)
    - **Alternative**: Use [ElephantSQL](https://www.elephantsql.com/) (free cloud PostgreSQL)
    - Create a database for your project
+   - Consider downloading pgAdmin (postgresql GUI)
    - Note your credentials: host, port, database name, username, password
 
-4. **Laravel Installer** (Optional but recommended)
+5. **Laravel Installer** (Optional but recommended)
 
    ```bash
    composer global require laravel/installer
    ```
 
-5. **Node.js and npm** (for asset compilation)
+6. **Node.js and npm** (for asset compilation)
    - [Download Node.js](https://nodejs.org/) (v16.x or higher)
    - Used for Laravel Mix/Vite if you use Tailwind, Bootstrap, etc.
 
-6. **Code Editor**
+7. **Code Editor**
    - **VS Code** (recommended) - [Download](https://code.visualstudio.com/)
-   - **PhpStorm** (professional, requires license)
 
-7. **Git**
+8. **Git**
    - [Download Git](https://git-scm.com/)
 
 ### Useful VS Code Extensions
@@ -180,6 +181,7 @@ _NOTE: You have creative freedom in implementing these expanded requirements. En
 - **Better Comments**
 - **Thunder Client** (for API testing if you add API routes)
 - **GitLens** (Git visualization)
+- **PHPUnit** (for running Unit tests; better start practicing now for TDD)
 
 ### Verifying Your Setup
 

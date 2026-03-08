@@ -28,7 +28,7 @@ Create a full-stack web application of your choice using the **MVC (Model-View-C
 
 Before you start, **create a GitHub repository** for your project named **"CMSC129-Lab2-LastNameFNInitials"** (e.g., CMSC129-Lab2-HismanaNG).
 
-### Minimum Requirements
+### 🤏 Minimum Requirements
 
 To get the passing score in the Features rubrics, your application must implement the following:
 
@@ -86,7 +86,7 @@ All views must be created using Blade templating engine (but you can use Laravel
    - Consistent navigation across pages
    - Just apply what you learned in HCI
 
-### Expanded Requirements
+### ➕ Expanded Requirements
 
 To get a perfect score in the Features Rubrics, implement the three (3) following features:
 
@@ -134,6 +134,8 @@ _**OR** if your application doesn't have suitable relationships (which... okay, 
 - Create database seeders to populate your database with sample data for testing and makes the demo quicker (at least 10 records for your main resource)
 - Again, I already added an example of this in the sample project.
 
+Again, you can do both 3a and 3b to practice both db seeding and db relationships.
+
 _NOTE: You have creative freedom in implementing these expanded requirements. Ensure they work properly during the demo._
 
 ---
@@ -147,16 +149,16 @@ _NOTE: You have creative freedom in implementing these expanded requirements. En
 1. **PHP** (v8.1 or higher)
    - **Windows**: [XAMPP](https://www.apachefriends.org/) or [Laragon](https://laragon.org/) (recommended)
    - **Linux**: just look it up, I don't use Linux
+     
 2. **Composer** (Dependency Manager for PHP)
    - [Download Composer](https://getcomposer.org/download/)
    - Verify installation: `composer --version`
-
+     
 3. **PostgreSQL** (v12 or higher)
    - [Download PostgreSQL](https://www.postgresql.org/download/)
    - **Alternative**: Use [ElephantSQL](https://www.elephantsql.com/) (free cloud PostgreSQL)
    - Create a database for your project
    - **🔑 IMPORTANT : Note your credentials: host, port, database name, username, password**
-
 4. **Laravel Installer** (Optional but recommended)
 
    ```bash

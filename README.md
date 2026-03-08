@@ -88,7 +88,7 @@ All views must be created using Blade templating engine (but you can use Laravel
 
 ### Expanded Requirements
 
-To get a perfect score in the Features Rubrics, implement the four (4) following features:
+To get a perfect score in the Features Rubrics, implement the three (3) following features:
 
 #### 1. Soft Delete with Restore Functionality
 

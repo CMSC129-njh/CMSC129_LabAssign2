@@ -88,7 +88,7 @@ All views must be created using Blade templating engine (but you can use Laravel
 
 ### Expanded Requirements
 
-To get a perfect score in the Features Rubrics, implement the three (3) following features:
+To get a perfect score in the Features Rubrics, implement the four (4) following features:
 
 #### 1. Soft Delete with Restore Functionality
 
@@ -119,16 +119,20 @@ _**OR** if your application doesn't have suitable fields for search/filter:_
   - Delete files when record is deleted
   - Update/replace files when edited
 
-#### 3. Database Relationships
+You can also implement both 2a and 2b if you want.
+
+#### 3a. Database Relationships
 
 - Create at least one additional model with a relationship to your main model (e.g., Category, Tag, Comment)
 - This is so you could learn how to use Eloquent relationships (hasOne, hasMany, belongsTo, belongsToMany)
 - _I already added an example of this in the sample code below, but you can choose any relationship type (one-to-many, many-to-many, one-to-one)_
 
-#### (OPTIONAL, ungraded) Database Seeding with Faker
+_**OR** if your application doesn't have suitable relationships (which... okay, weird, but I guess it happens):_
+
+#### 3b. Database Seeding with Faker
 
 - Create database seeders to populate your database with sample data for testing and makes the demo quicker (at least 10 records for your main resource)
-- _Again, I already added an example of this in the sample code below, but you can choose any data you want to seed._
+- Again, I already added an example of this in the sample project.
 
 _NOTE: You have creative freedom in implementing these expanded requirements. Ensure they work properly during the demo._
 
@@ -138,14 +142,11 @@ _NOTE: You have creative freedom in implementing these expanded requirements. En
 
 ### Required Software
 
+**IMPORTANT: Make sure to configure PATH**
+
 1. **PHP** (v8.1 or higher)
    - **Windows**: [XAMPP](https://www.apachefriends.org/) or [Laragon](https://laragon.org/) (recommended)
-   - **Mac**: Use Homebrew: `brew install php`
-   - **Linux**: `sudo apt install php php-cli php-mbstring php-xml php-pgsql`
-     (kay apparently may ga-Linux daw sa inyo)
-   - Also, make sure to configure the PATH (in Environment Variables in Windows) for PHP before proceeding with Composer (VITAL!).
-   
-
+   - **Linux**: just look it up, I don't use Linux
 2. **Composer** (Dependency Manager for PHP)
    - [Download Composer](https://getcomposer.org/download/)
    - Verify installation: `composer --version`
@@ -154,23 +155,23 @@ _NOTE: You have creative freedom in implementing these expanded requirements. En
    - [Download PostgreSQL](https://www.postgresql.org/download/)
    - **Alternative**: Use [ElephantSQL](https://www.elephantsql.com/) (free cloud PostgreSQL)
    - Create a database for your project
-   - Consider downloading pgAdmin (postgresql GUI)
-   - Note your credentials: host, port, database name, username, password
+   - **🔑 IMPORTANT : Note your credentials: host, port, database name, username, password**
 
-5. **Laravel Installer** (Optional but recommended)
+4. **Laravel Installer** (Optional but recommended)
 
    ```bash
    composer global require laravel/installer
    ```
 
-6. **Node.js and npm** (for asset compilation)
+5. **Node.js and npm** (for asset compilation)
    - [Download Node.js](https://nodejs.org/) (v16.x or higher)
    - Used for Laravel Mix/Vite if you use Tailwind, Bootstrap, etc.
 
-7. **Code Editor**
+6. **Code Editor**
    - **VS Code** (recommended) - [Download](https://code.visualstudio.com/)
+   - **PhpStorm** (professional, requires license)
 
-8. **Git**
+7. **Git**
    - [Download Git](https://git-scm.com/)
 
 ### Useful VS Code Extensions
@@ -181,7 +182,6 @@ _NOTE: You have creative freedom in implementing these expanded requirements. En
 - **Better Comments**
 - **Thunder Client** (for API testing if you add API routes)
 - **GitLens** (Git visualization)
-- **PHPUnit** (for running Unit tests; better start practicing now for TDD)
 
 ### Verifying Your Setup
 
@@ -229,7 +229,7 @@ As usual, 30% deduction if late.
 
 ## 📁 Project Structure
 
-Laravel follows a standard MVC structure. This is what it should resemble (does not have to be exactly this, of course:
+Laravel follows a standard MVC structure. Here's what you'll be working with:
 
 ```
 your-laravel-project/
@@ -318,7 +318,131 @@ composer create-project laravel/laravel your-project-name
 cd your-project-name
 ```
 
-#### Step 2: Configure Environment Variables
+#### Step 2: Set Up PostgreSQL Database
+
+**IMPORTANT**: You must set up PostgreSQL BEFORE configuring your Laravel environment variables!
+
+##### 2.1 Start PostgreSQL Server
+
+How to start PostgreSQL depends on your installation:
+
+**Option A: Standalone PostgreSQL Installation**
+
+- **Windows**:
+  - PostgreSQL usually starts automatically as a service
+  - Check if it's running: Open Services (Win+R → `services.msc`) → look for "postgresql-x64-XX" service
+  - If not running, right-click → Start
+  - Or start via Start Menu → PostgreSQL → pgAdmin 4
+
+**Option B: Using XAMPP**
+
+- Open XAMPP Control Panel
+- Click "Start" next to PostgreSQL
+- Note: XAMPP primarily uses MySQL; PostgreSQL is not included by default
+
+**Option C: Using Laragon (Recommended for Windows)**
+
+- Open Laragon
+- Click "Start All" button
+- PostgreSQL will start automatically if installed
+- Right-click Laragon tray icon → PostgreSQL → Start
+
+**Option D: Cloud PostgreSQL (ElephantSQL or Supabase)**
+
+- No need to start a server - it's already running in the cloud
+- Skip to creating database credentials below
+
+##### 2.2 Access PostgreSQL and Create Database
+
+**Method 1: Using pgAdmin (GUI - Recommended for Beginners)**
+
+1. **Open pgAdmin**
+
+2. **Connect to PostgreSQL Server**:
+   - Expand "Servers" in the left sidebar
+   - You'll see "PostgreSQL XX" - click to connect (XX is the version)
+   - **Default credentials** (set during PostgreSQL installation):
+     - Username: `postgres` (default superuser)
+     - Password: The password you set during installation
+     - If you forgot the password, you'll need to reset it or reinstall PostgreSQL (you can also do this: https://www.youtube.com/watch?v=_mrNgqO5Tic --- this is what I did since I forgot my password)
+
+3. **Create a New Database**:
+   - Right-click "Databases" → "Create" → "Database"
+   - Database name: Enter your desired database name (e.g., `laravel_menu_db`, `betch_menu_db`)
+   - Owner: Select `postgres` (or create a new user first)
+   - Click "Save"
+
+4. **Create a Database User (Optional but Recommended)**:
+   - Right-click "Login/Group Roles" → "Create" → "Login/Group Role"
+   - General tab: Name: `laravel_user` (or any username you prefer)
+   - Definition tab: Password: Create a secure password (e.g., `laravel123`)
+   - Privileges tab: Check "Can login?" and "Create databases?"
+   - Click "Save"
+
+   **_NOTE: This might require you to fix a lot of things, especially privilege settings, but it's worth practicing. If you don't want the headache, just use the default `postgres` superuser._**
+
+5. **Grant Privileges to User**:
+   - Right-click your database → "Properties" → "Security" tab
+   - Add privileges for your user: Grantee: `laravel_user`, Privileges: ALL
+   - Or right-click database → "GRANT Wizard" for easier setup
+
+**Method 2: Using psql Command Line**
+
+1. **Open Terminal/Command Prompt**
+
+2. **Connect to PostgreSQL**:
+
+   ```bash
+   # Windows (if psql is in PATH)
+   psql -U postgres
+
+   # Mac/Linux
+   sudo -u postgres psql
+
+   # You'll be prompted for the postgres user password
+   ```
+
+3. **Create Database**:
+
+   ```sql
+   CREATE DATABASE your_database_name;
+   ```
+
+4. **Create User (Optional but Recommended to practice)**:
+
+   ```sql
+   CREATE USER laravel_user WITH PASSWORD 'laravel123';
+   GRANT ALL PRIVILEGES ON DATABASE your_database_name TO laravel_user;
+   ```
+
+5. **Verify Database Creation**:
+   ```sql
+   \l         -- List all databases
+   \q         -- Quit psql
+   ```
+
+##### 2.3 Note Your Database Credentials
+
+Write down these credentials - you'll need them in Step 3:
+
+- **Database Host**: `127.0.0.1` or `localhost` (for local installations)
+- **Database Port**: `5432` (default PostgreSQL port)
+- **Database Name**: The database you created (e.g., `laravel_menu_db`)
+- **Username**:
+  - `postgres` (if using default superuser), OR
+  - `laravel_user` ( your custom username if you created a dedicated user)
+- **Password**:
+  - The password you set during PostgreSQL installation (for `postgres` user), OR
+  - The password you created for your dedicated user
+
+**For Cloud PostgreSQL (ElephantSQL/Supabase)**:
+
+- You'll get all these credentials from your cloud dashboard
+- Host will be a remote URL instead of `127.0.0.1`
+
+#### Step 3: Configure Environment Variables
+
+Now that PostgreSQL is running and your database is created, configure your Laravel project.
 
 Edit the `.env` file in your project root:
 
@@ -329,27 +453,51 @@ APP_DEBUG=true
 APP_URL=http://localhost:8000
 
 DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1           # Use localhost or 127.0.0.1 for local PostgreSQL
+DB_PORT=5432                # Default PostgreSQL port
+DB_DATABASE=your_database_name    # The database name you created in Step 2
+DB_USERNAME=your_username         # postgres or laravel_user or your custom username
+DB_PASSWORD=your_password         # The password you set in Step 2
+```
+
+**Example with actual values**:
+
+```env
+DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1
 DB_PORT=5432
-DB_DATABASE=your_database_name
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
+DB_DATABASE=laravel_menu_db
+DB_USERNAME=postgres
+DB_PASSWORD=myPostgresPass123
 ```
 
-**Important**: Make sure PostgreSQL is running and you've created the database!
+**Important Notes**:
 
-```sql
--- Connect to PostgreSQL and run:
-CREATE DATABASE your_database_name;
-```
+- Replace `your_database_name`, `your_username`, and `your_password` with the actual credentials from Step 2
+- Never commit the `.env` file to GitHub! It should already be in `.gitignore`
+- Keep your database password secure
 
-#### Step 3: Test Database Connection
+#### Step 4: Test Database Connection
+
+Run the following in your terminal to test the database connection and run migrations:
 
 ```bash
 php artisan migrate
 ```
 
+It should look something like this:
+
+![MIGRATE](success_migrate.png)
+
 If successful, you'll see Laravel's default migrations running. This confirms your database connection works!
+
+If you see:
+
+```
+ WARN  The SQLite database configured for this application does not exist: postgres.
+```
+
+This means that you likely forgot to change the database name from the default (and did not follow Step 3 properly). Double-check your `.env` file and make sure you have the correct database credentials against the database name in pgAdmin.
 
 #### Step 4: Start Development Server
 
@@ -357,19 +505,31 @@ If successful, you'll see Laravel's default migrations running. This confirms yo
 php artisan serve
 ```
 
-Visit `http://localhost:8000` - you should see the Laravel welcome page! 🎉
+![SERVE](serve.png)
+
+Visit `http://localhost:8000` - you should see the Laravel welcome page! (Ignore Jack in the corner, he's just vibing)
+
+![WELCOME](welcome.png)
 
 ---
 
 ### Phase 2: Building Your MVC Application
 
-<details> <summary>This is basically a sample project, and a lot of it is vibecoded but already tested and working.</summary>
+Let's build a sample **Manang Betch Snack House Karenderya Menu System** as an example. For now, this will just feature adding, editing, and deleting (and restoring deleted) menu items.
 
-Let's build a sample **Manang Betch Snack House Karenderya Menu System** as an example. Replace "MenuItem" with your chosen resource.
+![APP_PREV](manang_betch.png)
+
+_Disclaimer: A lot of it is vibecoded but already tested and working._
+
+**_NOTE: Your antivirus might keep popping up or just outright block changes, just make an exception for your Laravel project folder._**
+
+This phase will focus on setting up the Model, Controller, and Routes for your main resource. The example below uses a "MenuItem" resource for a sample "Manang Betch Snack House Karenderya Menu System". You can replace "MenuItem" with any resource you want (e.g., Todo, Post, Product, etc.) just make sure to adjust the fields accordingly.
+
+<details> <summary>Click to show steps and source code.</summary>
 
 #### Step 1: Create Model, Migration, and Controller
 
-Laravel provides a convenient command to create everything at once:
+Laravel provides a convenient command to create everything at once. Opening another terminal (make sure that your Laravel development server is still running in the first terminal), run:
 
 ```bash
 php artisan make:model MenuItem -mcr
@@ -422,7 +582,15 @@ return new class extends Migration
 php artisan migrate
 ```
 
+What migrate does is it looks at all the migration files in `database/migrations/` and applies any that haven't been applied yet to your database. This creates the `menu_items` table with the specified columns (in my case, it's in the `betch_menu_db` database in PostgreSQL).
+
+To confirm this, you can check your database in pgAdmin by expanding your database → Schemas → public → Tables → menu_items. You should see the columns you defined in the migration.
+
+![MENU_MIGRATION](menu_migration.png)
+
 #### Step 3: Configure Model
+
+Remember, a MODEL is responsible for interacting with the database. It "represents a table" in your database and allows you to perform CRUD operations on that table using Eloquent ORM.
 
 Edit `app/Models/MenuItem.php`:
 
@@ -466,6 +634,8 @@ class MenuItem extends Model
 
 Edit `routes/web.php`:
 
+Routes are responsible for mapping URLs to controller actions. They define how users can access different parts of your application (i.e. when clicking a link or submitting a form, which controller method should handle that request). In this case, the routes below set up the `MenuItemController` to handle all CRUD operations for the `MenuItem` resource.
+
 ```php
 <?php
 
@@ -479,7 +649,7 @@ Route::get('/', function () {
 // Resource routes for menu items (automatically creates all CRUD routes)
 Route::resource('menu-items', MenuItemController::class);
 
-// Additional routes for soft delete functionality (expanded requirements)
+// Additional routes for soft delete functionality
 Route::get('menu-items/trashed/all', [MenuItemController::class, 'trashed'])->name('menu-items.trashed');
 Route::patch('menu-items/{id}/restore', [MenuItemController::class, 'restore'])->name('menu-items.restore');
 Route::delete('menu-items/{id}/force-delete', [MenuItemController::class, 'forceDelete'])->name('menu-items.forceDelete');
@@ -495,9 +665,19 @@ Route::delete('menu-items/{id}/force-delete', [MenuItemController::class, 'force
 - `PUT/PATCH /menu-items/{id}` → update
 - `DELETE /menu-items/{id}` → destroy
 
-View all routes: `php artisan route:list`
+To view all routes: `php artisan route:list`
+
+If done correctly, it should show the following:
+
+![ROUTE_LIST](route_list.png)
 
 #### Step 5: Implement Controller Logic
+
+The Controller handles the business logic of your application. It receives requests from the routes, interacts with the model to perform database operations, and returns views or redirects.
+
+In the following code, we implement all CRUD operations, search/filter functionality, and soft delete features in the `MenuItemController`. This is a lot of code, but it's all necessary to meet the requirements of the lab.
+
+**_NOTE: the menu-items.index will be yellowed out (and opening [127.0.0.1 ](http://localhost:8000/) will show an error) because the Blade views haven't been created yet, but don't worry about it, just copy the code and we'll create the views in the next phase._**
 
 Edit `app/Http/Controllers/MenuItemController.php`:
 
@@ -525,6 +705,7 @@ class MenuItemController extends Controller
             $query->where('name', 'ILIKE', "%{$search}%")
                   ->orWhere('description', 'ILIKE', "%{$search}%");
         }
+        // the ILIKE operator is used for case-INsensitive search in PostgreSQL, I know, it's weird.
 
         // Filter by availability
         if ($request->has('availability') && $request->availability != '') {
@@ -533,6 +714,7 @@ class MenuItemController extends Controller
 
         // Paginate results
         $menuItems = $query->latest()->paginate(10)->withQueryString();
+        // without this, the pagination links will lose the search and filter query parameters, which is not good for UX
 
         return view('menu-items.index', compact('menuItems'));
     }
@@ -558,9 +740,9 @@ class MenuItemController extends Controller
             'half_price' => 'nullable|numeric|min:0|lt:full_price',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'is_available' => 'required|boolean',
-        ]);
+        ]); // nullable means "optional"
 
-        // Handle file upload
+        // Handle file upload (for photos of menu items)
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('menu-items', 'public');
         }
@@ -578,7 +760,7 @@ class MenuItemController extends Controller
     public function show(MenuItem $menuItem)
     {
         return view('menu-items.show', compact('menuItem'));
-    }
+    } // use compact to pass the menuItem variable to the view, so we can display its details in the show.blade.php view
 
     /**
      * Show the form for editing the specified menu item.
@@ -671,19 +853,40 @@ class MenuItemController extends Controller
 }
 ```
 
+So the CRUD operations we made are:
+
+```
+index() → Read (list all menu items)
+create() → Show form to Create new menu item
+store() → Create new menu item in database
+show() → Read (show details of a single menu item)
+edit() → Show form to Edit existing menu item
+update() → Update existing menu item in database
+destroy() → Soft delete menu item (move to trash)
+trashed() → Show list of soft-deleted menu items (trash)
+restore() → Restore soft-deleted menu item from trash
+forceDelete() → Permanently delete menu item from trash
+```
+
 </details>
 
 ---
 
 ### Phase 3: Creating Blade Views
 
-<details><summary>Again, this is just another mostly-vibe-coded code. </summary>
+Views are responsible for the presentation layer of your application. They display the data to the user and provide forms for user input. In Laravel, we use Blade templating engine to create our views.
+
+So for this project, this will show Manang Betch's menu items, allow users to add/edit/delete items, and also manage the trash (soft-deleted items). The views will be located in `resources/views/menu-items/` and we'll also create a master layout in `resources/views/layouts/`.
+
+<details><summary>Click to show steps (and vibe-coded) source code. </summary>
 
 #### Step 1: Create Master Layout
 
 _I'm using Bootstrap for styling, but you can use Tailwind or any CSS framework you prefer._
 
 Create `resources/views/layouts/app.blade.php`:
+
+(this is a 'master layout' that all other views will extend, it contains the common HTML structure, navigation, and footer for the application. this is the `layouts.app` referenced in the controller.)
 
 ```html
 <!DOCTYPE html>
@@ -703,11 +906,37 @@ Create `resources/views/layouts/app.blade.php`:
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
 
+    <!-- Custom UP Maroon Theme -->
+    <style>
+      :root {
+        --up-maroon: #800000;
+        --up-maroon-dark: #5c0000;
+        --up-maroon-light: #a01010;
+      }
+      .bg-maroon {
+        background-color: var(--up-maroon) !important;
+      }
+      .btn-maroon {
+        background-color: var(--up-maroon);
+        border-color: var(--up-maroon);
+        color: white;
+      }
+      .btn-maroon:hover {
+        background-color: var(--up-maroon-dark);
+        border-color: var(--up-maroon-dark);
+        color: white;
+      }
+      .card-header.bg-maroon {
+        background-color: var(--up-maroon) !important;
+        color: white;
+      }
+    </style>
+
     @stack('styles')
   </head>
   <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-maroon">
       <div class="container">
         <a class="navbar-brand" href="{{ route('menu-items.index') }}">
           <i class="fas fa-utensils"></i> Manang Betch Snack House
@@ -768,8 +997,10 @@ Create `resources/views/layouts/app.blade.php`:
     <!-- Main Content -->
     <main class="container my-4">@yield('content')</main>
 
+    <!-- okay, so yield is like a placeholder telling Laravel "hey, when you render a view that extends this layout, put the content of the section named 'content' here". So when we create our index.blade.php, create.blade.php, etc., and we define a section like @section('content') ... @endsection, whatever is inside that section will be injected into this layout at the place where yield('content') is.-->
+
     <!-- Footer -->
-    <footer class="bg-danger text-white text-center py-3 mt-5">
+    <footer class="bg-maroon text-white text-center py-3 mt-5">
       <p class="mb-0">
         &copy; {{ date('Y') }} Manang Betch Snack House Karenderya
       </p>
@@ -786,6 +1017,8 @@ Create `resources/views/layouts/app.blade.php`:
 
 Create `resources/views/menu-items/index.blade.php`:
 
+(this view displays a list of all menu items, with search and filter functionality, and actions to view/edit/delete each item. it extends layouts.app which we'll add later. patience.)
+
 ```html
 @extends('layouts.app')
 
@@ -795,7 +1028,7 @@ Create `resources/views/menu-items/index.blade.php`:
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header bg-danger text-white">
+            <div class="card-header bg-maroon text-white">
                 <h4 class="mb-0"><i class="fas fa-utensils"></i> Menu Items</h4>
             </div>
             <div class="card-body">
@@ -814,7 +1047,7 @@ Create `resources/views/menu-items/index.blade.php`:
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <button type="submit" class="btn btn-danger">
+                        <button type="submit" class="btn btn-maroon">
                             <i class="fas fa-search"></i> Search
                         </button>
                         <a href="{{ route('menu-items.index') }}" class="btn btn-secondary">
@@ -922,6 +1155,8 @@ Create `resources/views/menu-items/index.blade.php`:
 
 Create `resources/views/menu-items/create.blade.php`:
 
+(now this part is for the form to add new menu items, it extends the master layout and contains a form that **submits to the store method in the controller**. it also includes validation error handling and file upload for the menu item image.)
+
 ```html
 @extends('layouts.app')
 
@@ -1007,7 +1242,7 @@ Create `resources/views/menu-items/create.blade.php`:
                                 name="is_available"
                                 required>
                             <option value="1" {{ old('is_available', 1) == 1 ? 'selected' : '' }}>Available</option>
-                            <option value="0" {{ old('is_available') == 0 ? 'selected' : '' }}>Not Available</option>
+                            <option value="0" {{ old('is_available', 1) == 0 ? 'selected' : '' }}>Not Available</option>
                         </select>
                         @error('is_available')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -1043,7 +1278,11 @@ Create `resources/views/menu-items/create.blade.php`:
 @endsection
 ```
 
-Create `resources/views/menu-items/edit.blade.php`:
+_NOTE: Before you test this, take note that the image upload functionality won't work yet (we need to first set up Storage and symbolic links in Laravel, which we'll cover in the next phase), but you can still test the form validation and database insertion by submitting the form without an image._
+
+Next, create `resources/views/menu-items/edit.blade.php`:
+
+(this view is similar to the create view but pre-fills the form with the existing menu item data (via the $menuItem variable passed from the controller) and submits to the update method in the controller.)
 
 ```html
 @extends('layouts.app')
@@ -1182,6 +1421,8 @@ Create `resources/views/menu-items/edit.blade.php`:
 
 Create `resources/views/menu-items/show.blade.php`:
 
+(the show view displays the details of a single menu item, including its image, name, prices, availability, description, and timestamps. it also provides buttons to go back to the index, edit the item, or (soft) delete it.)
+
 ```html
 @extends('layouts.app') @section('title', 'Menu Item Details')
 @section('content')
@@ -1294,6 +1535,8 @@ Create `resources/views/menu-items/show.blade.php`:
 
 Create `resources/views/menu-items/trashed.blade.php`:
 
+(Trash view is just to show trashed/soft-deleted menu items)
+
 ```php
 @extends('layouts.app')
 
@@ -1303,7 +1546,7 @@ Create `resources/views/menu-items/trashed.blade.php`:
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header bg-danger text-white">
+            <div class="card-header bg-maroon text-white">
                 <h4 class="mb-0"><i class="fas fa-trash"></i> Trashed Menu Items</h4>
             </div>
             <div class="card-body">
@@ -1396,10 +1639,9 @@ Create `resources/views/menu-items/trashed.blade.php`:
 
 ### Phase 4: Setting Up File Storage
 
-<details>
-<summary>Click to expand</summary>
+File storage in Laravel is handled through the **Filesystem** which provides a simple and unified API for working with files across different storage backends (local, S3, etc.). For our application, we will use the local storage to handle uploaded images for menu items.
 
-Laravel needs to create a symbolic link from `public/storage` to `storage/app/public` for file uploads to work:
+Laravel needs to create a symbolic link from `public/storage` to `storage/app/public` for file uploads to work. In a separate terminal, run:
 
 ```bash
 php artisan storage:link
@@ -1407,7 +1649,9 @@ php artisan storage:link
 
 This command creates a symbolic link so uploaded files in `storage/app/public` are accessible from the web.
 
-</details>
+![MENU_MIGRATION](storage_link.png)
+
+Now that's setup, you can test the image upload functionality (add new menu item with a photo uploaded).
 
 ---
 
@@ -1436,10 +1680,10 @@ class MenuItemFactory extends Factory
         $dishes = [
             'Adobo Manok', 'Lumpia', 'Kare-Kare', 'Bicol Express Chicken', 'Pakbet',
             'Sisig', 'Bulalo', 'Dinuguan',
-            'Pancit Canton', 'Lumpiang Shanghai', 'Fried Chicken', 'Pork BBQ nga tig-a2x'
+            'Sotanghon', 'Lumpiang Shanghai', 'Fried Chicken'
         ];
-
-        $fullPrice = $this->faker->randomFloat(2, 50, 200);
+        // faker is used to generate random data for the menu items. it randomly selects a dish name from the predefined list and generates a random price for full serve and optionally for half serve (with a 70% chance of having a half price). it also randomly determines if the item is available or not (with an 85% chance of being available).
+        $fullPrice = $this->faker->randomFloat(2, 30, 70);
         $halfPrice = $this->faker->boolean(70) ? $fullPrice * 0.6 : null;
 
         return [
